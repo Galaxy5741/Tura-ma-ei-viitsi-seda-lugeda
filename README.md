@@ -1,17 +1,18 @@
 # Quick Summarizer - Chrome Extension
 
-**For ADHD people who can't be bothered to read long documents!**
+**For ADHD people who can't fucking read long documents!**
 
-A Chrome extension that instantly summarizes long documents, articles, and Terms of Service pages using AI. Perfect for quick reading and understanding lengthy content.
+A Chrome extension that instantly summarizes long documents, articles, and Terms of Service pages using AI.
 
 ## Features
+**Shortly** It summerizes long ass documents
 
 - **One-Click Summarization** - Summarize any webpage with a single click
 - **Smart Text Extraction** - Automatically identifies and extracts main content
 - **Customizable Output** - Choose bullet points and highlighting options
 - **Fast & Affordable** - Uses MoonShot AI (~$0.01 per summary)
 - **Privacy-Focused** - API key stored locally, no data collection
-- **Beautiful UI** - Clean, modern interface with smooth animations
+- **Beautiful UI** - Clean, modern interface with smooth animationsclaude --teleport session_013g36Bu3vYJTWuAYd2sPg37
 
 ## Cost Information
 
