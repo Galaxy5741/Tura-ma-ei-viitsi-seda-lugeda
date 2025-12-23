@@ -34,27 +34,16 @@ This means you can summarize hundreds of documents for just a few dollars!
 4. Create a new API key
 5. Copy and save the key (starts with `sk-`)
 
-### Step 2: Add Extension Icons
+### Step 2: Load the Extension in Chrome
 
-Before loading the extension, you need to add icon files:
+1. Download this Github repo
+2. Open Chrome and navigate to `chrome://extensions/`
+3. Enable **Developer mode** (toggle in top-right corner)
+4. Click **Load unpacked**
+5. Select the extension directory (this folder)
+6. The extension should now appear in your extensions list
 
-1. Navigate to the `icons/` directory
-2. Add three PNG files:
-   - `icon16.png` (16x16 pixels)
-   - `icon48.png` (48x48 pixels)
-   - `icon128.png` (128x128 pixels)
-
-See `icons/README.md` for detailed instructions on creating icons.
-
-### Step 3: Load the Extension in Chrome
-
-1. Open Chrome and navigate to `chrome://extensions/`
-2. Enable **Developer mode** (toggle in top-right corner)
-3. Click **Load unpacked**
-4. Select the extension directory (this folder)
-5. The extension should now appear in your extensions list
-
-### Step 4: Configure Your API Key
+### Step 3: Configure Your API Key
 
 1. Click the extension icon in your Chrome toolbar
 2. Click **Open Settings** or **Settings** link
