@@ -106,11 +106,29 @@ async function handleSummarize() {
     // Get the active tab
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-    // Extract text from the page
-    const response = await chrome.tabs.sendMessage(tab.id, { action: 'extractText' });
+    // Check if we're on a restricted page
+    if (tab.url.startsWith('chrome://') ||
+        tab.url.startsWith('edge://') ||
+        tab.url.startsWith('about:') ||
+        tab.url.startsWith('chrome-extension://')) {
+      throw new Error('Cannot summarize this page. Extensions cannot access browser internal pages. Please try on a regular webpage.');
+    }
 
-    if (!response.success) {
-      throw new Error(response.error || 'Failed to extract text from page');
+    // Extract text from the page
+    let response;
+    try {
+      response = await chrome.tabs.sendMessage(tab.id, { action: 'extractText' });
+    } catch (err) {
+      // Content script not loaded - try to inject it
+      if (err.message.includes('Could not establish connection') ||
+          err.message.includes('Receiving end does not exist')) {
+        throw new Error('Please refresh this page and try again. (The extension needs to reload on this page)');
+      }
+      throw err;
+    }
+
+    if (!response || !response.success) {
+      throw new Error(response?.error || 'Failed to extract text from page');
     }
 
     currentPageText = response.text;
