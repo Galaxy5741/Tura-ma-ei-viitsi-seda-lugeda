@@ -9,7 +9,7 @@
     "scripting"
   ],
   "host_permissions": [
-    "https://api.moonshot.cn/*"
+    "https://api.moonshot.ai/*"
   ],
   "action": {
     "default_popup": "popup.html",
