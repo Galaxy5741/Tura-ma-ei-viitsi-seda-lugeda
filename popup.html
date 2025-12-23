@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Summarizer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📄 Quick Summarizer</h1>
+      <p class="subtitle">Summarize any page in seconds</p>
+    </header>
+
+    <div id="main-content">
+      <div id="setup-notice" class="notice hidden">
+        <p>⚙️ Please set your API key in the extension settings first.</p>
+        <button id="open-settings">Open Settings</button>
+      </div>
+
+      <div id="controls" class="hidden">
+        <button id="summarize-btn" class="primary-btn">
+          <span class="btn-icon">✨</span>
+          Summarize This Page
+        </button>
+
+        <div class="options">
+          <label>
+            <input type="checkbox" id="bullet-points" checked>
+            Use bullet points
+          </label>
+          <label>
+            <input type="checkbox" id="highlight-key" checked>
+            Highlight key terms
+          </label>
+        </div>
+      </div>
+
+      <div id="loading" class="hidden">
+        <div class="spinner"></div>
+        <p>Analyzing and summarizing...</p>
+      </div>
+
+      <div id="result" class="hidden">
+        <h3>Summary:</h3>
+        <div id="summary-content"></div>
+        <div class="actions">
+          <button id="copy-btn" class="secondary-btn">📋 Copy</button>
+          <button id="new-summary-btn" class="secondary-btn">🔄 New Summary</button>
+        </div>
+      </div>
+
+      <div id="error" class="error hidden">
+        <p id="error-message"></p>
+        <button id="retry-btn" class="secondary-btn">Try Again</button>
+      </div>
+    </div>
+
+    <footer>
+      <a href="#" id="settings-link">Settings</a>
+      <span class="separator">•</span>
+      <span class="made-with">Made with ❤️</span>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

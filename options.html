@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Summarizer - Settings</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .section {
+      margin-bottom: 35px;
+    }
+
+    .section h2 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: monospace;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .help-text {
+      font-size: 13px;
+      color: #666;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .help-text a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    .help-text a:hover {
+      text-decoration: underline;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .primary-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .primary-btn:active {
+      transform: translateY(0);
+    }
+
+    .secondary-btn {
+      background: #f0f0f0;
+      color: #333;
+      margin-left: 10px;
+    }
+
+    .secondary-btn:hover {
+      background: #e0e0e0;
+    }
+
+    .status-message {
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-top: 15px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .status-message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+
+    .status-message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
+
+    .info-box {
+      background: #e8eaf6;
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+
+    .info-box h3 {
+      color: #667eea;
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .info-box p {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .info-box ol {
+      margin-left: 20px;
+      font-size: 13px;
+      color: #555;
+      line-height: 1.8;
+    }
+
+    .info-box code {
+      background: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .button-group {
+      display: flex;
+      align-items: center;
+    }
+
+    footer {
+      background: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .toggle-password {
+      position: relative;
+    }
+
+    .toggle-password-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      color: #666;
+      font-size: 12px;
+    }
+
+    .toggle-password-btn:hover {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>⚙️ Quick Summarizer Settings</h1>
+      <p class="subtitle">Configure your AI summarization preferences</p>
+    </header>
+
+    <div class="content">
+      <div class="section">
+        <h2>🔑 API Configuration</h2>
+        <div class="form-group">
+          <label for="api-key">MoonShot AI API Key</label>
+          <div style="position: relative;">
+            <input type="password" id="api-key" placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx">
+            <button type="button" class="toggle-password-btn" id="toggle-password">Show</button>
+          </div>
+          <p class="help-text">
+            Don't have an API key? Get one from
+            <a href="https://platform.moonshot.cn/console/api-keys" target="_blank">MoonShot AI Platform</a>
+          </p>
+        </div>
+
+        <div class="button-group">
+          <button id="save-btn" class="primary-btn">💾 Save Settings</button>
+          <button id="clear-btn" class="secondary-btn">🗑️ Clear</button>
+        </div>
+
+        <div id="status-message" class="status-message"></div>
+      </div>
+
+      <div class="info-box">
+        <h3>📋 How to get your MoonShot AI API Key:</h3>
+        <ol>
+          <li>Visit <a href="https://platform.moonshot.cn/" target="_blank">platform.moonshot.cn</a></li>
+          <li>Sign up or log in to your account</li>
+          <li>Navigate to the API Keys section</li>
+          <li>Create a new API key</li>
+          <li>Copy the key and paste it above</li>
+        </ol>
+        <p style="margin-top: 12px;">
+          <strong>Note:</strong> Your API key is stored locally in your browser and is never shared with anyone except MoonShot AI when making summarization requests.
+        </p>
+      </div>
+
+      <div class="info-box" style="margin-top: 20px;">
+        <h3>💡 About Costs:</h3>
+        <p>
+          MoonShot AI is very affordable:
+        </p>
+        <ul style="margin-left: 20px; margin-top: 8px; font-size: 13px; line-height: 1.8;">
+          <li>Input: ~$0.60 per 1 million tokens</li>
+          <li>Output: ~$2.50 per 1 million tokens</li>
+          <li>Average cost per summary: ~$0.01 or less</li>
+        </ul>
+        <p style="margin-top: 10px;">
+          This means you can summarize hundreds of documents for just a few dollars!
+        </p>
+      </div>
+    </div>
+
+    <footer>
+      Made with ❤️ for making reading easier
+    </footer>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
