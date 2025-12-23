@@ -31,7 +31,8 @@ async function init() {
   if (!apiKey) {
     showSetupNotice();
   } else {
-    showControls();
+    // Check if we have a saved summary for the current tab
+    await loadSavedSummary();
   }
 
   // Set up event listeners
@@ -41,6 +42,59 @@ async function init() {
   newSummaryBtn.addEventListener('click', resetToControls);
   openSettingsBtn.addEventListener('click', openSettings);
   settingsLink.addEventListener('click', openSettings);
+}
+
+/**
+ * Load saved summary for current tab if it exists
+ */
+async function loadSavedSummary() {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const storageKey = `summary_${tab.id}`;
+    const result = await chrome.storage.local.get(storageKey);
+
+    if (result[storageKey]) {
+      const savedData = result[storageKey];
+      showResult(savedData.summary);
+    } else {
+      showControls();
+    }
+  } catch (err) {
+    console.error('Error loading saved summary:', err);
+    showControls();
+  }
+}
+
+/**
+ * Save summary for current tab
+ */
+async function saveSummary(summary) {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const storageKey = `summary_${tab.id}`;
+    await chrome.storage.local.set({
+      [storageKey]: {
+        summary: summary,
+        timestamp: Date.now(),
+        url: tab.url
+      }
+    });
+  } catch (err) {
+    console.error('Error saving summary:', err);
+  }
+}
+
+/**
+ * Clear saved summary for current tab
+ */
+async function clearSavedSummary() {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const storageKey = `summary_${tab.id}`;
+    await chrome.storage.local.remove(storageKey);
+  } catch (err) {
+    console.error('Error clearing summary:', err);
+  }
 }
 
 /**
@@ -106,11 +160,29 @@ async function handleSummarize() {
     // Get the active tab
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-    // Extract text from the page
-    const response = await chrome.tabs.sendMessage(tab.id, { action: 'extractText' });
+    // Check if we're on a restricted page
+    if (tab.url.startsWith('chrome://') ||
+        tab.url.startsWith('edge://') ||
+        tab.url.startsWith('about:') ||
+        tab.url.startsWith('chrome-extension://')) {
+      throw new Error('Cannot summarize this page. Extensions cannot access browser internal pages. Please try on a regular webpage.');
+    }
 
-    if (!response.success) {
-      throw new Error(response.error || 'Failed to extract text from page');
+    // Extract text from the page
+    let response;
+    try {
+      response = await chrome.tabs.sendMessage(tab.id, { action: 'extractText' });
+    } catch (err) {
+      // Content script not loaded - try to inject it
+      if (err.message.includes('Could not establish connection') ||
+          err.message.includes('Receiving end does not exist')) {
+        throw new Error('Please refresh this page and try again. (The extension needs to reload on this page)');
+      }
+      throw err;
+    }
+
+    if (!response || !response.success) {
+      throw new Error(response?.error || 'Failed to extract text from page');
     }
 
     currentPageText = response.text;
@@ -138,7 +210,8 @@ async function handleSummarize() {
     // Call MoonShot API
     const summary = await summarizeText(currentPageText, apiKey);
 
-    // Show result
+    // Save and show result
+    await saveSummary(summary);
     showResult(summary);
 
   } catch (err) {
@@ -276,7 +349,8 @@ function handleRetry() {
 /**
  * Reset to controls view
  */
-function resetToControls() {
+async function resetToControls() {
+  await clearSavedSummary();
   showControls();
 }
 
