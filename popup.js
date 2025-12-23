@@ -31,7 +31,8 @@ async function init() {
   if (!apiKey) {
     showSetupNotice();
   } else {
-    showControls();
+    // Check if we have a saved summary for the current tab
+    await loadSavedSummary();
   }
 
   // Set up event listeners
@@ -41,6 +42,59 @@ async function init() {
   newSummaryBtn.addEventListener('click', resetToControls);
   openSettingsBtn.addEventListener('click', openSettings);
   settingsLink.addEventListener('click', openSettings);
+}
+
+/**
+ * Load saved summary for current tab if it exists
+ */
+async function loadSavedSummary() {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const storageKey = `summary_${tab.id}`;
+    const result = await chrome.storage.local.get(storageKey);
+
+    if (result[storageKey]) {
+      const savedData = result[storageKey];
+      showResult(savedData.summary);
+    } else {
+      showControls();
+    }
+  } catch (err) {
+    console.error('Error loading saved summary:', err);
+    showControls();
+  }
+}
+
+/**
+ * Save summary for current tab
+ */
+async function saveSummary(summary) {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const storageKey = `summary_${tab.id}`;
+    await chrome.storage.local.set({
+      [storageKey]: {
+        summary: summary,
+        timestamp: Date.now(),
+        url: tab.url
+      }
+    });
+  } catch (err) {
+    console.error('Error saving summary:', err);
+  }
+}
+
+/**
+ * Clear saved summary for current tab
+ */
+async function clearSavedSummary() {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const storageKey = `summary_${tab.id}`;
+    await chrome.storage.local.remove(storageKey);
+  } catch (err) {
+    console.error('Error clearing summary:', err);
+  }
 }
 
 /**
@@ -156,7 +210,8 @@ async function handleSummarize() {
     // Call MoonShot API
     const summary = await summarizeText(currentPageText, apiKey);
 
-    // Show result
+    // Save and show result
+    await saveSummary(summary);
     showResult(summary);
 
   } catch (err) {
@@ -294,7 +349,8 @@ function handleRetry() {
 /**
  * Reset to controls view
  */
-function resetToControls() {
+async function resetToControls() {
+  await clearSavedSummary();
   showControls();
 }
 
