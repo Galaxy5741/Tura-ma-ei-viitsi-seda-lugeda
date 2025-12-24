@@ -199,8 +199,8 @@ async function handleSummarize() {
       currentPageText = currentPageText.split(/\s+/).slice(0, maxWords).join(' ');
     }
 
-    // Get API key
-    const { apiKey } = await chrome.storage.sync.get('apiKey');
+    // Get API key and system prompt
+    const { apiKey, systemPrompt } = await chrome.storage.sync.get(['apiKey', 'systemPrompt']);
 
     if (!apiKey) {
       showSetupNotice();
@@ -208,7 +208,7 @@ async function handleSummarize() {
     }
 
     // Call MoonShot API
-    const summary = await summarizeText(currentPageText, apiKey);
+    const summary = await summarizeText(currentPageText, apiKey, systemPrompt);
 
     // Save and show result
     await saveSummary(summary);
@@ -223,9 +223,12 @@ async function handleSummarize() {
 /**
  * Summarize text using MoonShot AI API
  */
-async function summarizeText(text, apiKey) {
+async function summarizeText(text, apiKey, customSystemPrompt) {
   const useBulletPoints = bulletPointsCheckbox.checked;
   const highlightKey = highlightKeyCheckbox.checked;
+
+  // Use custom system prompt if provided, otherwise use default
+  const systemPrompt = customSystemPrompt || 'You are a helpful assistant that creates clear, concise summaries of text. You focus on extracting the most important information and presenting it in an easy-to-understand format.';
 
   // Build the prompt
   let prompt = `Please provide a clear and concise summary of the following text. `;
@@ -256,7 +259,7 @@ ${text}`;
         messages: [
           {
             role: 'system',
-            content: 'You are a helpful assistant that creates clear, concise summaries of text. You focus on extracting the most important information and presenting it in an easy-to-understand format.'
+            content: systemPrompt
           },
           {
             role: 'user',
