@@ -9,8 +9,8 @@ const resetPromptBtn = document.getElementById('reset-prompt-btn');
 const statusMessage = document.getElementById('status-message');
 const togglePasswordBtn = document.getElementById('toggle-password');
 
-// Default system prompt (ADHD-friendly)
-const DEFAULT_SYSTEM_PROMPT = 'You are a helpful assistant for people with ADHD. Keep summaries extremely concise and use simple language.';
+// Default system prompt
+const DEFAULT_SYSTEM_PROMPT = 'You are a helpful assistant that creates clear, concise summaries of text. You focus on extracting the most important information and presenting it in an easy-to-understand format.';
 
 /**
  * Load saved settings

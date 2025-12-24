@@ -227,8 +227,8 @@ async function summarizeText(text, apiKey, customSystemPrompt) {
   const useBulletPoints = bulletPointsCheckbox.checked;
   const highlightKey = highlightKeyCheckbox.checked;
 
-  // Use custom system prompt if provided, otherwise use default ADHD-friendly prompt
-  const systemPrompt = customSystemPrompt || 'You are a helpful assistant for people with ADHD. Keep summaries extremely concise and use simple language.';
+  // Use custom system prompt if provided, otherwise use default
+  const systemPrompt = customSystemPrompt || 'You are a helpful assistant that creates clear, concise summaries of text. You focus on extracting the most important information and presenting it in an easy-to-understand format.';
 
   // Build the prompt
   let prompt = `Please provide a clear and concise summary of the following text. `;
